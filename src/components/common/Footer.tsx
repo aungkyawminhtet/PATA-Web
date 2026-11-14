@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { ExternalLink, MapPin, Globe } from 'lucide-react';
 import { LanguageCode, PageRoute } from '../../types/tourism';
 import { TRANSLATIONS } from '../../data/translations';
+import { useTourism } from '../../context/TourismContext';
 import {
   Select,
   SelectContent,
@@ -13,13 +15,36 @@ import {
 } from '@/components/ui/select';
 
 interface FooterProps {
-  lang: LanguageCode;
-  onNavigate: (route: PageRoute) => void;
-  totalPlaces: number;
+  lang?: LanguageCode;
+  onNavigate?: (route: PageRoute) => void;
+  totalPlaces?: number;
   onChangeLang?: (lang: LanguageCode) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ lang, onNavigate, totalPlaces, onChangeLang }) => {
+export const Footer: React.FC<FooterProps> = ({
+  lang: propLang,
+  onNavigate,
+  totalPlaces: propTotalPlaces,
+  onChangeLang: propOnChangeLang,
+}) => {
+  let contextLang: LanguageCode = 'en';
+  let contextSetLang: (l: LanguageCode) => void = () => {};
+  let contextTotalPlaces = 14;
+
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const tourism = useTourism();
+    contextLang = tourism.lang;
+    contextSetLang = tourism.setLang;
+    contextTotalPlaces = tourism.places.length;
+  } catch {
+    // Fallback if rendered outside context
+  }
+
+  const lang = propLang ?? contextLang;
+  const totalPlaces = propTotalPlaces ?? contextTotalPlaces;
+  const onChangeLang = propOnChangeLang ?? contextSetLang;
+
   const t = TRANSLATIONS[lang];
 
   return (
@@ -30,7 +55,9 @@ export const Footer: React.FC<FooterProps> = ({ lang, onNavigate, totalPlaces, o
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-white font-display font-bold text-lg">
               <MapPin className="w-5 h-5 text-[#f5f0de]" />
-              <span>Mae Sai Tourism Intelligence &amp; Discovery</span>
+              <Link href="/" className="hover:text-[#f5f0de] transition-colors">
+                Mae Sai Tourism Intelligence &amp; Discovery
+              </Link>
             </div>
             <p className="text-sm text-[#E5E9E2]/80 leading-relaxed">
               A centralized civic &amp; community tourism discovery platform for Mae Sai District,
@@ -50,58 +77,58 @@ export const Footer: React.FC<FooterProps> = ({ lang, onNavigate, totalPlaces, o
             </h3>
             <ul className="space-y-2.5 text-sm text-[#E5E9E2]/80">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('explore')}
+                <Link
+                  href="/explore"
+                  onClick={() => onNavigate?.('explore')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.explore}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('map')}
+                <Link
+                  href="/map"
+                  onClick={() => onNavigate?.('map')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.map}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('planner')}
+                <Link
+                  href="/planner"
+                  onClick={() => onNavigate?.('planner')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.planner}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('insights')}
+                <Link
+                  href="/insights"
+                  onClick={() => onNavigate?.('insights')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.insights}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('routes')}
+                <Link
+                  href="/routes"
+                  onClick={() => onNavigate?.('routes')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.routes}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('businesses')}
+                <Link
+                  href="/businesses"
+                  onClick={() => onNavigate?.('businesses')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   {t.nav.businesses}
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
@@ -113,31 +140,31 @@ export const Footer: React.FC<FooterProps> = ({ lang, onNavigate, totalPlaces, o
             </h3>
             <ul className="space-y-2.5 text-sm text-[#E5E9E2]/80">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('about')}
+                <Link
+                  href="/about"
+                  onClick={() => onNavigate?.('about')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   About the Project &amp; Data Ethics
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('contact')}
+                <Link
+                  href="/contact"
+                  onClick={() => onNavigate?.('contact')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   Contact, Suggest Place &amp; Help
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('dataset')}
+                <Link
+                  href="/dataset"
+                  onClick={() => onNavigate?.('dataset')}
                   className="hover:text-[#f5f0de] transition-colors cursor-pointer"
                 >
                   Mae Sai District Dataset Analysis
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

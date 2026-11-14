@@ -1,9 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X, Bookmark, Globe, BarChart3 } from 'lucide-react';
 import { LanguageCode, PageRoute } from '../../types/tourism';
 import { TRANSLATIONS } from '../../data/translations';
+import { useTourism } from '../../context/TourismContext';
 import {
   Select,
   SelectContent,
@@ -13,38 +16,74 @@ import {
 } from '@/components/ui/select';
 
 interface HeaderProps {
-  activeRoute: PageRoute;
-  onNavigate: (route: PageRoute) => void;
-  lang: LanguageCode;
-  onChangeLang: (lang: LanguageCode) => void;
-  savedCount: number;
-  tripStopsCount: number;
-  onOpenSaved: () => void;
+  activeRoute?: PageRoute;
+  onNavigate?: (route: PageRoute) => void;
+  lang?: LanguageCode;
+  onChangeLang?: (lang: LanguageCode) => void;
+  savedCount?: number;
+  tripStopsCount?: number;
+  onOpenSaved?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeRoute,
   onNavigate,
-  lang,
-  onChangeLang,
-  savedCount,
-  tripStopsCount,
-  onOpenSaved,
+  lang: propLang,
+  onChangeLang: propOnChangeLang,
+  savedCount: propSavedCount,
+  tripStopsCount: propTripStopsCount,
+  onOpenSaved: propOnOpenSaved,
 }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Consume context if props are omitted
+  let contextLang: LanguageCode = 'en';
+  let contextSetLang: (l: LanguageCode) => void = () => {};
+  let contextSavedCount = 0;
+  let contextTripStopsCount = 0;
+  let contextOpenSaved = () => {};
+
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const tourism = useTourism();
+    contextLang = tourism.lang;
+    contextSetLang = tourism.setLang;
+    contextSavedCount = tourism.savedPlaceIds.length;
+    contextTripStopsCount = tourism.tripStops.length;
+    contextOpenSaved = () => tourism.setSavedDrawerOpen(true);
+  } catch {
+    // Rendered outside of TourismProvider
+  }
+
+  const lang = propLang ?? contextLang;
+  const onChangeLang = propOnChangeLang ?? contextSetLang;
+  const savedCount = propSavedCount ?? contextSavedCount;
+  const tripStopsCount = propTripStopsCount ?? contextTripStopsCount;
+  const onOpenSaved = propOnOpenSaved ?? contextOpenSaved;
+
   const t = TRANSLATIONS[lang];
 
-  const mainNav: { route: PageRoute; label: string }[] = [
-    { route: 'home', label: t.nav.home },
-    { route: 'explore', label: t.nav.explore },
-    { route: 'map', label: t.nav.map },
-    { route: 'planner', label: t.nav.planner },
-    { route: 'insights', label: t.nav.insights },
-    { route: 'businesses', label: t.nav.businesses },
+  const mainNav: { href: string; route: PageRoute; label: string }[] = [
+    { href: '/', route: 'home', label: t.nav.home },
+    { href: '/explore', route: 'explore', label: t.nav.explore },
+    { href: '/map', route: 'map', label: t.nav.map },
+    { href: '/planner', route: 'planner', label: t.nav.planner },
+    { href: '/insights', route: 'insights', label: t.nav.insights },
+    { href: '/businesses', route: 'businesses', label: t.nav.businesses },
   ];
 
-  const handleNav = (route: PageRoute) => {
-    onNavigate(route);
+  const isItemActive = (href: string, route: PageRoute) => {
+    if (activeRoute) {
+      return activeRoute === route || (route === 'explore' && activeRoute === 'place_detail');
+    }
+    if (href === '/') return pathname === '/';
+    if (href === '/explore') return pathname.startsWith('/explore') || pathname.startsWith('/places');
+    return pathname.startsWith(href);
+  };
+
+  const handleLinkClick = (route: PageRoute) => {
+    onNavigate?.(route);
     setMobileOpen(false);
   };
 
@@ -52,13 +91,13 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-[#E5E9E2]">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-6">
         {/* Zone 1: Single-line Brand Wordmark */}
-        <button
-          type="button"
-          onClick={() => handleNav('home')}
+        <Link
+          href="/"
+          onClick={() => handleLinkClick('home')}
           className="font-display text-xl sm:text-2xl font-normal tracking-tight text-[#26352A] hover:text-[#406246] transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#406246]"
         >
           {t.brandTitle}
-        </button>
+        </Link>
 
         {/* Zone 2: Clean single-line Navigation Links */}
         <nav
@@ -66,14 +105,12 @@ export const Header: React.FC<HeaderProps> = ({
           className="hidden lg:flex items-center gap-6 text-base font-medium"
         >
           {mainNav.map((item) => {
-            const isActive =
-              activeRoute === item.route ||
-              (item.route === 'explore' && activeRoute === 'place_detail');
+            const isActive = isItemActive(item.href, item.route);
             return (
-              <button
+              <Link
                 key={item.route}
-                type="button"
-                onClick={() => handleNav(item.route)}
+                href={item.href}
+                onClick={() => handleLinkClick(item.route)}
                 className={`relative py-1 whitespace-nowrap shrink-0 cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#406246] ${
                   isActive
                     ? 'text-[#406246] font-semibold'
@@ -92,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className="absolute left-0 right-0 -bottom-[21px] h-0.5 bg-[#406246]"
                   />
                 )}
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -142,18 +179,18 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          <button
-            type="button"
-            onClick={() => handleNav('dataset')}
+          <Link
+            href="/dataset"
+            onClick={() => handleLinkClick('dataset')}
             className={`hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeRoute === 'dataset'
+              pathname.startsWith('/dataset')
                 ? 'bg-[#26352A] text-white'
                 : 'bg-[#406246] text-white hover:bg-[#26352A]'
             }`}
           >
             <BarChart3 className="w-3.5 h-3.5" />
             <span>{t.nav.dataset}</span>
-          </button>
+          </Link>
 
           <button
             type="button"
@@ -172,12 +209,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="lg:hidden bg-white border-b border-[#E5E9E2] px-4 py-4 space-y-3">
           <div className="grid grid-cols-2 gap-2">
             {mainNav.map((item) => {
-              const isActive = activeRoute === item.route;
+              const isActive = isItemActive(item.href, item.route);
               return (
-                <button
+                <Link
                   key={item.route}
-                  type="button"
-                  onClick={() => handleNav(item.route)}
+                  href={item.href}
+                  onClick={() => handleLinkClick(item.route)}
                   className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                     isActive
                       ? 'bg-[#406246] text-white'
@@ -185,31 +222,31 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               );
             })}
-            <button
-              type="button"
-              onClick={() => handleNav('routes')}
+            <Link
+              href="/routes"
+              onClick={() => handleLinkClick('routes')}
               className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer ${
-                activeRoute === 'routes'
+                pathname.startsWith('/routes')
                   ? 'bg-[#406246] text-white'
                   : 'bg-[#fafaf8] text-[#26352A] hover:bg-[#f5f0de]'
               }`}
             >
               {t.nav.routes}
-            </button>
-            <button
-              type="button"
-              onClick={() => handleNav('about')}
+            </Link>
+            <Link
+              href="/about"
+              onClick={() => handleLinkClick('about')}
               className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium cursor-pointer ${
-                activeRoute === 'about'
+                pathname.startsWith('/about')
                   ? 'bg-[#406246] text-white'
                   : 'bg-[#fafaf8] text-[#26352A] hover:bg-[#f5f0de]'
               }`}
             >
               {t.nav.about}
-            </button>
+            </Link>
           </div>
 
           <div className="pt-3 border-t border-[#E5E9E2] flex flex-wrap items-center justify-between gap-2">
@@ -250,13 +287,13 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 {t.nav.saved} ({savedCount})
               </button>
-              <button
-                type="button"
-                onClick={() => handleNav('dataset')}
-                className="px-3 py-2 text-xs font-semibold bg-[#406246] text-white rounded-lg cursor-pointer"
+              <Link
+                href="/dataset"
+                onClick={() => handleLinkClick('dataset')}
+                className="px-3 py-2 text-xs font-semibold bg-[#406246] text-white rounded-lg cursor-pointer inline-flex items-center"
               >
                 {t.nav.dataset}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
