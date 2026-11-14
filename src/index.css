@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@layer base {
+  :root {
+    --brand-primary: #406246;
+    --brand-dark: #26352A;
+    --brand-warm: #f5f0de;
+    --brand-soft: #E5E9E2;
+    --brand-gray: #6B7280;
+    --brand-amber: #D97706;
+    --brand-red: #B84040;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: 'Inter', 'Noto Sans Thai', 'Noto Sans Myanmar', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.625;
+    font-weight: 400;
+    background-color: #fafaf8;
+    color: #1c241e;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, .font-display, .font-editorial {
+    font-family: 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.625;
+  }
+
+  nav, button, .btn {
+    font-family: 'Inter', sans-serif;
+  }
+
+  input, select, textarea {
+    font-size: 16px !important;
+    font-family: 'Inter', sans-serif;
+  }
+
+  table, th, td {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .font-mono-tabular {
+    font-family: 'Inter', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Custom Leaflet UI & Marker overrides */
+.leaflet-container {
+  font-family: 'Inter', 'Noto Sans Thai', 'Noto Sans Myanmar', sans-serif;
+  background: #e9ece6;
+}
+
+.maesai-custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(38, 53, 42, 0.16);
+  border: 1px solid #e5e9e2;
+  padding: 0;
+  overflow: hidden;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  min-width: 220px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
