@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { LocalBusinessesPage as LocalBusinessesView } from '@/src/views/LocalBusinessesPage';
-import { PageRoute } from '@/src/types/tourism';
+import { useTourism } from '@/context/TourismContext';
+import { LocalBusinessesPage as LocalBusinessesView } from '@/views/LocalBusinessesPage';
+import { PageRoute } from '@/types/tourism';
 
 export default function BusinessesPage() {
   const router = useRouter();

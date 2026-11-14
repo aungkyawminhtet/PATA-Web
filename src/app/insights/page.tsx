@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { TourismInsightsPage as TourismInsightsView } from '@/src/views/TourismInsightsPage';
+import { useTourism } from '@/context/TourismContext';
+import { TourismInsightsPage as TourismInsightsView } from '@/views/TourismInsightsPage';
 
 export default function InsightsPage() {
   const router = useRouter();

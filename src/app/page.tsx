@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { HomePage as HomeView } from '@/src/views/HomePage';
-import { CategoryId, PageRoute, SuggestedRoute } from '@/src/types/tourism';
+import { useTourism } from '@/context/TourismContext';
+import { HomePage as HomeView } from '@/views/HomePage';
+import { CategoryId, PageRoute, SuggestedRoute } from '@/types/tourism';
 
 export default function HomePage() {
   const router = useRouter();

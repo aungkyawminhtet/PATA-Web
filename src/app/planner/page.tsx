@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { TripPlannerPage as TripPlannerView } from '@/src/views/TripPlannerPage';
+import { useTourism } from '@/context/TourismContext';
+import { TripPlannerPage as TripPlannerView } from '@/views/TripPlannerPage';
 
 export default function PlannerPage() {
   const router = useRouter();

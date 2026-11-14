@@ -2,9 +2,9 @@
 
 import React, { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { ExplorePage as ExploreView } from '@/src/views/ExplorePage';
-import { CategoryId } from '@/src/types/tourism';
+import { useTourism } from '@/context/TourismContext';
+import { ExplorePage as ExploreView } from '@/views/ExplorePage';
+import { CategoryId } from '@/types/tourism';
 
 function ExploreInner() {
   const router = useRouter();

@@ -172,6 +172,36 @@
     --brand-amber: #D97706;
     --brand-red: #B84040;
   }
+
+  /* Utility to hide scrollbars for clean carousels */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Infinite marquee animations */
+  @keyframes marquee-scroll {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: marquee-scroll 60s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
 }
 
 /* Custom Leaflet UI & Marker overrides */

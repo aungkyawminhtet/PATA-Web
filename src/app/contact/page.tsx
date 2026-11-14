@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { useTourism } from '@/src/context/TourismContext';
-import { AboutContactPage as AboutContactView } from '@/src/views/AboutContactPage';
+import { useTourism } from '@/context/TourismContext';
+import { AboutContactPage as AboutContactView } from '@/views/AboutContactPage';
 
-export default function AboutPage() {
+export default function ContactPage() {
   const { places, addSubmission } = useTourism();
 
   return (
     <AboutContactView
-      mode="about"
+      mode="contact"
       totalPlaces={places.length}
       onSubmitContact={addSubmission}
     />

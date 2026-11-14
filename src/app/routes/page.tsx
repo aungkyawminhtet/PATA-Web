@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { SuggestedRoutesPage as SuggestedRoutesView } from '@/src/views/SuggestedRoutesPage';
-import { SuggestedRoute } from '@/src/types/tourism';
+import { useTourism } from '@/context/TourismContext';
+import { SuggestedRoutesPage as SuggestedRoutesView } from '@/views/SuggestedRoutesPage';
+import { SuggestedRoute } from '@/types/tourism';
 
 export default function RoutesPage() {
   const router = useRouter();

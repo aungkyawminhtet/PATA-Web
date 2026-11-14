@@ -3,8 +3,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useTourism } from '@/src/context/TourismContext';
-import { PlaceDetailPage as PlaceDetailView } from '@/src/views/PlaceDetailPage';
+import { useTourism } from '@/context/TourismContext';
+import { PlaceDetailPage as PlaceDetailView } from '@/views/PlaceDetailPage';
 
 export function PlaceDetailClient({ id }: { id: string }) {
   const router = useRouter();

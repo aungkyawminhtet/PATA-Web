@@ -1,4 +1,4 @@
-import { INITIAL_PLACES } from '@/src/data/maeSaiPlaces';
+import { INITIAL_PLACES } from '@/data/maeSaiPlaces';
 import { PlaceDetailClient } from './PlaceDetailClient';
 
 export function generateStaticParams() {

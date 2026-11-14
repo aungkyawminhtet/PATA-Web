@@ -2,8 +2,8 @@
 
 import React, { Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { InteractiveMapPage as InteractiveMapView } from '@/src/views/InteractiveMapPage';
+import { useTourism } from '@/context/TourismContext';
+import { InteractiveMapPage as InteractiveMapView } from '@/views/InteractiveMapPage';
 
 function MapInner() {
   const router = useRouter();

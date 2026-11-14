@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { useTourism } from '@/src/context/TourismContext';
-import { DatasetAnalysisPage as DatasetAnalysisView } from '@/src/views/DatasetAnalysisPage';
+import { useTourism } from '@/context/TourismContext';
+import { DatasetAnalysisPage as DatasetAnalysisView } from '@/views/DatasetAnalysisPage';
 
 export default function DatasetPage() {
   const router = useRouter();
