@@ -35,7 +35,7 @@ export const PlaceCard: React.FC<PlaceCardProps> = ({
   const priceDisplay =
     place.priceMax === 0
       ? t.common.freeEntry
-      : `${place.priceMin}–${place.priceMax} THB (est.)`;
+      : `${place.priceMin}–${place.priceMax} THB`;
 
   return (
     <article className="bg-white rounded-2xl border border-[#E5E9E2] overflow-hidden flex flex-col hover:shadow-lg hover:border-[#406246]/40 transition-all duration-300 group">
